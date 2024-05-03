@@ -1,0 +1,83 @@
+---
+# Update and upgrade packages on all hosts
+- hosts: all
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+
+    - name: Upgrade packages
+      apt:
+        upgrade: yes
+        autoremove: yes
+        autoclean: yes
+
+# Install and configure HAProxy
+- hosts: HAproxy
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: HAProxy Update
+      apt:
+        update_cache: yes
+
+    - name: Install HAProxy
+      apt:
+        name: haproxy
+        state: latest
+
+    - name: Configure HAProxy
+      template:
+        src: haproxy.cfg  # Assuming the HAProxy configuration file is present in the same directory as the playbook
+        dest: /etc/haproxy/haproxy.cfg
+
+    - name: Restart HAProxy
+      service:
+        name: haproxy
+        state: restarted
+
+# Deploy and test the Flask app on webservers
+- hosts: webservers
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Webservers update
+      apt:
+        update_cache: yes
+
+    - name: Install python3-pip
+      apt:
+        name: python3-pip
+        state: latest
+        update_cache: yes
+
+    - name: Install Flask
+      pip:
+        name: flask
+        state: latest
+
+    - name: Install Gunicorn
+      apt:
+        name: gunicorn
+
+    - name: Copy the Flask app code to the servers
+      copy:
+        src: /$PWD/application2.py  # Source path of the Flask app code
+        dest: /home/ubuntu/application2.py  # Destination path on the remote servers
+        owner: ubuntu
+        mode: '0644'
+
+    - name: Execute the Flask app deployment
+      shell: gunicorn -w 2 -D -b 0.0.0.0:5000 application2:app  # Run the Flask app using Gunicorn
+
+# Restart HAProxy on HAproxy host
+- hosts: HAproxy
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Restart HAProxy
+      service:
+        name: haproxy
+        state: restarted
