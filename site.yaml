@@ -35,7 +35,7 @@
 
     - name: Restart HAproxy
       service:
-        name: HAproxy
+        name: haproxy
         state: restarted
 
 # Deploy and test Flask app on webservers
