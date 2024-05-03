@@ -25,17 +25,17 @@
 
     - name: Install HAProxy
       apt:
-        name: haproxy
+        name: HAproxy
         state: latest
 
     - name: Configure HAProxy
       template:
-        src: haproxy.cfg  # Assuming the HAProxy configuration file is present in the same directory as the playbook
-        dest: /etc/haproxy/haproxy.cfg
+        src: HAproxy.cfg  # Assuming the HAProxy configuration file is present in the same directory as the playbook
+        dest: /etc/haproxy/HAproxy.cfg
 
     - name: Restart HAProxy
       service:
-        name: haproxy
+        name: HAproxy
         state: restarted
 
 # Deploy and test the Flask app on webservers
@@ -77,7 +77,7 @@
   become: yes
   become_method: sudo
   tasks:
-    - name: Restart HAProxy
+    - name: Restart HAproxy
       service:
-        name: haproxy
+        name: HAproxy
         state: restarted
