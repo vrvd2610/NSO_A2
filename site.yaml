@@ -79,5 +79,5 @@
   tasks:
     - name: Restart HAproxy
       service:
-        name: HAproxy
+        name: haproxy
         state: restarted
