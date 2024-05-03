@@ -38,7 +38,7 @@
         name: HAproxy
         state: restarted
 
-# Deploy and test the Flask app on webservers
+# Deploy and test Flask app on webservers
 - hosts: webservers
   become: yes
   become_method: sudo
