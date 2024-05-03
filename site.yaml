@@ -1,5 +1,3 @@
----
-# Update and upgrade packages on all hosts
 - hosts: all
   gather_facts: yes
   become: yes
@@ -13,8 +11,7 @@
         upgrade: yes
         autoremove: yes
         autoclean: yes
-
-# Install and configure HAProxy
+#installs and configures haproxy
 - hosts: HAproxy
   become: yes
   become_method: sudo
@@ -30,54 +27,56 @@
 
     - name: Configure HAproxy
       template:
-        src: HAproxy.cfg  # Assuming the HAProxy configuration file is present in the same directory as the playbook
-        dest: /etc/haproxy/HAproxy.cfg
+        src: haproxy.cfg
+        dest: /etc/haproxy/haproxy.cfg
 
     - name: Restart HAproxy
+      become: yes
       service:
         name: haproxy
         state: restarted
 
-# Deploy and test Flask app on the webservers
+# Deploys and tests the flask app on webservers
 - hosts: webservers
   become: yes
   become_method: sudo
   tasks:
-    - name: Webservers Update
+
+    - name: Webservers update
       apt:
         update_cache: yes
 
-    - name: Install python3-pip
+    - name: install python3-pip
       apt:
         name: python3-pip
         state: latest
         update_cache: yes
 
-    - name: Install Flask
+    - name: flask installation
       pip:
         name: flask
         state: latest
 
-    - name: Install Gunicorn
+    - name: install Gunicorn
       apt:
         name: gunicorn
 
-    - name: Copy the Flask app code to the servers
+    - name: copy the flask app code to the servers
       copy:
-        src: /$PWD/application2.py  # Source path of the Flask app code
-        dest: /home/ubuntu/application2.py  # Destination path on the remote servers
+        src:  /$PWD/application2.py
+        dest: /home/ubuntu/application2.py
         owner: ubuntu
         mode: '0644'
 
-    - name: Execute the Flask app deployment
-      shell: gunicorn -w 2 -D -b 0.0.0.0:5000 application2:app  # Run the Flask app using Gunicorn
+    - name: Running Flask application #Execute the flask app
+      shell: gunicorn -w 2 -D -b 0.0.0.0:5000 application2:app
 
-# Restart HAProxy on HAproxy host
 - hosts: HAproxy
   become: yes
   become_method: sudo
   tasks:
     - name: Restart HAproxy
+      become: yes
       service:
-        name: haproxy
-        state: restarted
+            name: haproxy
+            state: restarted
