@@ -1,5 +1,5 @@
 #Simple flask services/applications for various assignments.
-# 
+
 # main.py: Online calculator, supports only 'add'.
 # application2.py: Replies with a string containing the Time and hostname.
 # assignment2.py: Replies with an HTML formatted string containing the Time and hostname.
