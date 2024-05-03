@@ -19,21 +19,21 @@
   become: yes
   become_method: sudo
   tasks:
-    - name: HAProxy Update
+    - name: HAproxy Update
       apt:
         update_cache: yes
 
-    - name: Install HAProxy
+    - name: Install HAproxy
       apt:
         name: HAproxy
         state: latest
 
-    - name: Configure HAProxy
+    - name: Configure HAproxy
       template:
         src: HAproxy.cfg  # Assuming the HAProxy configuration file is present in the same directory as the playbook
         dest: /etc/haproxy/HAproxy.cfg
 
-    - name: Restart HAProxy
+    - name: Restart HAproxy
       service:
         name: HAproxy
         state: restarted
