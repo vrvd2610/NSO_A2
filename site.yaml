@@ -1,3 +1,4 @@
+# Update and upgrade packages on all hosts
 - hosts: all
   gather_facts: yes
   become: yes
@@ -11,7 +12,8 @@
         upgrade: yes
         autoremove: yes
         autoclean: yes
-#installs and configures haproxy
+
+# Install and configure HAProxy
 - hosts: HAproxy
   become: yes
   become_method: sudo
@@ -36,41 +38,41 @@
         name: haproxy
         state: restarted
 
-# Deploys and tests the flask app on webservers
+# Deploy and test the Flask app on webservers
 - hosts: webservers
   become: yes
   become_method: sudo
   tasks:
-
     - name: Webservers update
       apt:
         update_cache: yes
 
-    - name: install python3-pip
+    - name: Install python3-pip
       apt:
         name: python3-pip
         state: latest
         update_cache: yes
 
-    - name: flask installation
+    - name: Install Flask
       pip:
         name: flask
         state: latest
 
-    - name: install Gunicorn
+    - name: Install Gunicorn
       apt:
         name: gunicorn
 
-    - name: copy the flask app code to the servers
+    - name: Copy the Flask app code to the servers
       copy:
-        src:  /$PWD/application2.py
+        src:  /$PWD/application2.py  
         dest: /home/ubuntu/application2.py
         owner: ubuntu
         mode: '0644'
 
-    - name: Running Flask application #Execute the flask app
-      shell: gunicorn -w 2 -D -b 0.0.0.0:5000 application2:app
+    - name: Execute the Flask app deployment
+      shell: gunicorn -w 2 -D -b 0.0.0.0:5000 application2:app  # Run the Flask app using Gunicorn
 
+# Restart HAProxy on HAproxy host
 - hosts: HAproxy
   become: yes
   become_method: sudo
@@ -78,5 +80,5 @@
     - name: Restart HAproxy
       become: yes
       service:
-            name: haproxy
-            state: restarted
+        name: haproxy
+        state: restarted
