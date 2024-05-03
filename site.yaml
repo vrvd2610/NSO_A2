@@ -25,7 +25,7 @@
 
     - name: Install HAproxy
       apt:
-        name: HAproxy
+        name: haproxy
         state: latest
 
     - name: Configure HAproxy
