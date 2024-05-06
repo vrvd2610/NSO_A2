@@ -1,6 +1,6 @@
 [HAproxy]  
 HAproxy 
-[web_servers]  
+[webservers]  
 devA  
 devB  
 devC  
