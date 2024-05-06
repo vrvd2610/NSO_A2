@@ -1,54 +1,45 @@
----
-- name: Deploy Application and Configure HAProxy
-  hosts: localhost
+# Update and upgrade packages on all hosts
+- hosts: all
   gather_facts: yes
+  become: yes
   tasks:
-    - name: Gather Facts
-      setup:
-
     - name: Update package cache
       apt:
         update_cache: yes
-      become: yes
 
     - name: Upgrade packages
       apt:
-        upgrade: dist
+        upgrade: yes
+        autoremove: yes
+        autoclean: yes
+
+# Install and configure HAProxy
+- hosts: HAproxy
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: HAproxy Update
+      apt:
         update_cache: yes
-      become: yes
 
-- name: Configure Servers
-  hosts: bastionET2598
-  become: yes
-  tasks:
-    - name: Retrieve IP addresses of instances
-      debug:
-        msg: "The IP address of {{ item }} is {{ hostvars[item].ansible_default_ipv4.address }}"
-      with_items: "{{ groups['webservers'] }}"
-
-- name: Configure HAProxy
-  hosts: HAproxy
-  become: yes
-  tasks:
-    - name: Install HAProxy
+    - name: Install HAproxy
       apt:
         name: haproxy
-        state: present
+        state: latest
 
-    - name: Copy HAProxy configuration template
+    - name: Configure HAproxy
       template:
-        src: haproxy.cfg.j2
+        src: haproxy.cfg
         dest: /etc/haproxy/haproxy.cfg
-      notify: Restart HAProxy
 
-  handlers:
-    - name: Restart HAProxy
+    - name: Restart HAproxy
+      become: yes
       service:
         name: haproxy
         state: restarted
 
-- name: Deploy and test the Flask app on webservers
-  hosts: webservers
+# Deploy and test the Flask app on webservers
+- hosts: webservers
   become: yes
   become_method: sudo
   tasks:
@@ -73,7 +64,7 @@
 
     - name: Copy the Flask app code to the servers
       copy:
-        src: /$PWD/application2.py  
+        src:  /$PWD/application2.py  
         dest: /home/ubuntu/application2.py
         owner: ubuntu
         mode: '0644'
@@ -81,8 +72,8 @@
     - name: Execute the Flask app deployment
       shell: gunicorn -w 2 -D -b 0.0.0.0:5000 application2:app  # Run the Flask app using Gunicorn
 
-- name: Restart HAProxy on HAproxy host
-  hosts: HAproxy
+# Restart HAProxy on HAproxy host
+- hosts: HAproxy
   become: yes
   become_method: sudo
   tasks:
