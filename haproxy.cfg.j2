@@ -1,0 +1,23 @@
+global
+    log stdout format raw local0
+    maxconn 2048
+    user haproxy
+    group haproxy
+
+defaults
+    log global
+    retries 3
+    option redispatch
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
+
+frontend http_front
+    bind *:80
+    default_backend http_back
+
+backend http_back
+    balance roundrobin
+    {% for host in groups['webservers'] %}
+    server {{ hostvars[host].ansible_hostname }} {{ hostvars[host].ansible_default_ipv4.address }}:5000 check
+    {% endfor %}
