@@ -70,7 +70,7 @@
         mode: '0755'
 
     - name: Execute the Flask app deployment
-      shell: gunicorn -w 2 -D -b 0.0.0.0:5000 application2:app  # Run the Flask app using Gunicorn
+      shell: gunicorn -w 2 -D -b 0.0.0.0:7000 application2:app  # Run the Flask app using Gunicorn
 
 # Restart HAProxy on HAproxy host
 - hosts: HAproxy
