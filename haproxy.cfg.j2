@@ -40,9 +40,9 @@ frontend load_balacer
 backend webservers
 	mode http
 	balance roundrobin
-    {% for dev_servers in groups['webservers'] %}
-    server  {{ dev_servers }} {{ hostvars[dev_servers]["ansible_default_ipv4"]["address"]}}:7000
-    {% endfor %}
+     {% for dev_servers in groups['webservers'] %}
+     server  {{ dev_servers }} {{ hostvars[dev_servers]["ansible_default_ipv4"]["address"]}}:7000
+     {% endfor %}
 
 listen stats
     bind *:8404
