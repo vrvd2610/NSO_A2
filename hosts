@@ -1,10 +1,13 @@
 [HAproxy]  
-HAproxy 
+HAproxy  
+ 
 [webservers]  
 devA  
 devB  
 devC  
+
+[bastionET2598]
+bastionET2598
  
 [all:vars]  
-ansible_user=ubuntu  
-##REMOVED sshkey entry, handled by external SSH config file ## 
+ansible_user=ubuntu 
