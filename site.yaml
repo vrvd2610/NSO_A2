@@ -67,7 +67,7 @@
         src:  /$PWD/application2.py  
         dest: /home/ubuntu/application2.py
         owner: ubuntu
-        mode: '0644'
+        mode: '0755'
 
     - name: Execute the Flask app deployment
       shell: gunicorn -w 2 -D -b 0.0.0.0:5000 application2:app  # Run the Flask app using Gunicorn
