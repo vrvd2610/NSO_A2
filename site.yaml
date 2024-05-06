@@ -18,13 +18,13 @@
       become: yes
 
 - name: Configure Servers
-  hosts: bastionET2598-C6F1W4VTQSEL8R4I
+  hosts: bastionET2598
   become: yes
   tasks:
     - name: Retrieve IP addresses of instances
       debug:
         msg: "The IP address of {{ item }} is {{ hostvars[item].ansible_default_ipv4.address }}"
-      with_items: "{{ groups['web_servers'] }}"
+      with_items: "{{ groups['webservers'] }}"
 
 - name: Configure HAProxy
   hosts: HAproxy
