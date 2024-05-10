@@ -1,7 +1,11 @@
-I am RajaVishnu Dev Venna. MailId: rave22@student.bth.se. 
 This NSO assignment 2. 
 This repo contains an ansible playbook file (site.yaml) along with HAproxy file (haproxy.cfg.j2) and hosts file. 
-This ansible playbook updates the web servers and installs the required modules/extensions and run the flask app.
+This ansible playbook (site.yaml) updates and upgrades the all the web servers and deploy the required modules/extensions and run the flask app in them.
+HAProxy file (haproxy.cfg.j2) is a template file used by HAProxy, a widely-used open-source software that provides high availability, load balancing, 
+and proxying for TCP and HTTP-based applications. 
+The .j2 extension typically signifies that it's a Jinja2 template file, which allows code dynamically generates HAProxy server entries based on the hosts defined 
+in the Ansible group 'web_servers'. 
+It ensures that HAProxy will be configured to route traffic to each host in the 'web_servers' group by their hostname and IPv4 address.
 
 
 #Simple flask services/applications for various assignments.
