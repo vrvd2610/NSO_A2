@@ -1,3 +1,9 @@
+I am RajaVishnu Dev Venna. MailId: rave22@student.bth.se. 
+This NSO assignment 2. 
+This repo contains an ansible playbook file (site.yaml) along with HAproxy file (haproxy.cfg.j2) and hosts file. 
+This ansible playbook updates the web servers and installs the required modules/extensions and run the flask app.
+
+
 #Simple flask services/applications for various assignments.
 #
 # main.py: Online calculator, supports only 'add'.
@@ -7,8 +13,6 @@
 #export FLASK_APP=<filename>
 #export FLASK_RUN_HOST=<localhost|0.0.0.0>
 #export FLASK_RUN_PORT=8210
-
-
 
 Usage Example:
 export FLASK_APP=main.py
